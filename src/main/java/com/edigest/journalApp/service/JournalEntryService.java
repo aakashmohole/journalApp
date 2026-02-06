@@ -2,7 +2,7 @@ package com.edigest.journalApp.service;
 
 import com.edigest.journalApp.entity.JournalEntry;
 import com.edigest.journalApp.entity.User;
-import com.edigest.journalApp.repositry.JournalEntryRepository;
+import com.edigest.journalApp.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class JournalEntryService {
             }
             JournalEntry saved = journalEntryRepository.save(journalEntry);
             user.getJournalEntries().add(saved);
-            userService.saveEntry(user);
+            userService.saveUser(user);
         }catch (Exception e){
             System.out.println(e);
             throw new RuntimeException("An error occurred while saving entry!", e);
@@ -51,7 +51,7 @@ public class JournalEntryService {
     public void deleteById(ObjectId myId, String userName){
         User user = userService.findByUserName(userName);
         user.getJournalEntries().removeIf(x -> x.getId().equals(myId));
-        userService.saveEntry(user);
+        userService.saveUser(user);
         journalEntryRepository.deleteById(myId);
     }
 }
